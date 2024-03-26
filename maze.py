@@ -153,7 +153,7 @@ def map_creation():
     if mallet == 1:
         number_of_mallets += 1
         Number_of_props.set('槌子x' + str(number_of_mallets))
-        for _ in range(0, int(size / 10), 1):
+        for _ in range(0, int(size*size *0.005), 1):
             while Map[Yrand][Xrand] != '':
                 Xrand = rand(2, size - 2)
                 Yrand = rand(2, size - 2)
@@ -195,18 +195,15 @@ def frontend_settings():
 
     #遊戲畫面設置
     game_screen = Frame(bg="orange", bd=10, relief=SUNKEN)
-    game_screen.grid(row=2, column=vision-1, rowspan=3, columnspan=3)
-    Y_min_out_of_range = Y - vision if Y - vision >= 0 else 0
-    X_min_out_of_range = X - vision if X - vision >= 0 else 0
-    Y_max_out_of_range = Y_min_out_of_range + vision*2+1 if Y_min_out_of_range + vision*2+1 <size else size
-    X_max_out_of_range = X_min_out_of_range + vision*2+1 if X_min_out_of_range + vision*2+1 <size else size
-    for i in range(Y_min_out_of_range-(Y_min_out_of_range + vision*2+1-Y_max_out_of_range), Y_max_out_of_range):
+    game_screen.grid(row=2, column=0, rowspan=vision*2+1, columnspan=vision*2+1)
+    Y_min_vision,Y_max_vision,X_min_vision,X_max_vision=map_is_out_of_view()
+    for i in range(Y_min_vision, Y_max_vision):
         game_screen_icon.append([StringVar() for _ in range(vision*2+1)])
         scope.append([None] * (vision*2+1))
-        for j in range(X_min_out_of_range-(X_min_out_of_range + vision*2+1-X_max_out_of_range), X_max_out_of_range):
-            scope[i - Y_min_out_of_range+(Y_min_out_of_range + vision*2+1-Y_max_out_of_range)][j - X_min_out_of_range+(X_min_out_of_range + vision*2+1-X_max_out_of_range)] = Label(game_screen, textvariable=game_screen_icon[i - Y_min_out_of_range][j - X_min_out_of_range], width=7, height=3)
-            scope[i - Y_min_out_of_range+(Y_min_out_of_range + vision*2+1-Y_max_out_of_range)][j - X_min_out_of_range+(X_min_out_of_range + vision*2+1-X_max_out_of_range)].grid(row=i - Y_min_out_of_range + 2, column=j - X_min_out_of_range)
-            game_screen_icon[i - Y_min_out_of_range+(Y_min_out_of_range + vision*2+1-Y_max_out_of_range)][j - X_min_out_of_range+(X_min_out_of_range + vision*2+1-X_max_out_of_range)].set(Map[i][j])
+        for j in range(X_min_vision, X_max_vision):
+            scope[i - Y_min_vision][j - X_min_vision] = Label(game_screen, textvariable=game_screen_icon[i - Y_min_vision][j - X_min_vision], width=7, height=3)
+            scope[i - Y_min_vision][j - X_min_vision].grid(row=i - Y_min_vision+2, column=j - X_min_vision)
+            game_screen_icon[i - Y_min_vision][j - X_min_vision].set(Map[i][j])
 
     #遊戲按鍵設置
     game_button = Frame(bg="blue")
@@ -223,6 +220,20 @@ def frontend_settings():
     down = Button(game_button, text='↓', width=7, height=3, command=partial(control_character, 'down'))
     down.grid(row=4+vision*2+1+2, column=vision)
 
+
+
+#視野範圍超出地圖範圍的變數控制
+def map_is_out_of_view():
+    
+    Y_min_out_of_range = Y - vision if Y - vision >= 0 else 0
+    X_min_out_of_range = X - vision if X - vision >= 0 else 0
+    Y_max_out_of_range = Y_min_out_of_range + vision*2+1 if Y_min_out_of_range + vision*2+1 <size else size
+    X_max_out_of_range = X_min_out_of_range + vision*2+1 if X_min_out_of_range + vision*2+1 <size else size
+    Y_min_vision=Y_min_out_of_range-(Y_min_out_of_range + vision*2+1-Y_max_out_of_range)
+    Y_max_vision=Y_max_out_of_range
+    X_min_vision=X_min_out_of_range-(X_min_out_of_range + vision*2+1-X_max_out_of_range)
+    X_max_vision=X_max_out_of_range
+    return Y_min_vision,Y_max_vision,X_min_vision,X_max_vision
 
 
 # 移動角色的函數，根據方向更新角色位置和地圖狀態
@@ -349,13 +360,10 @@ def move():
         Number_of_props.set('槌子x' + str(number_of_mallets))
     Map[Y][X] = 'O'
     #視野
-    Y_min_out_of_range = Y - vision if Y - vision >= 0 else 0
-    X_min_out_of_range = X - vision if X - vision >= 0 else 0
-    Y_max_out_of_range = Y_min_out_of_range + vision*2+1 if Y_min_out_of_range + vision*2+1 <size else size
-    X_max_out_of_range = X_min_out_of_range + vision*2+1 if X_min_out_of_range + vision*2+1 <size else size
-    for i in range(Y_min_out_of_range-(Y_min_out_of_range + vision*2+1-Y_max_out_of_range), Y_max_out_of_range):
-        for j in range(X_min_out_of_range-(X_min_out_of_range + vision*2+1-X_max_out_of_range), X_max_out_of_range):
-            game_screen_icon[i - Y_min_out_of_range+(Y_min_out_of_range + vision*2+1-Y_max_out_of_range)][j - X_min_out_of_range+(X_min_out_of_range + vision*2+1-X_max_out_of_range)].set(Map[i][j])
+    Y_min_vision,Y_max_vision,X_min_vision,X_max_vision=map_is_out_of_view()#視野範圍超出地圖範圍的變數控制
+    for i in range(Y_min_vision, Y_max_vision):
+        for j in range(X_min_vision, X_max_vision):
+            game_screen_icon[i - Y_min_vision][j - X_min_vision].set(Map[i][j])
     if perspective_flag == 1:
         os.system('cls')
         for i in range(1, size - 1):
