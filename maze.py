@@ -8,6 +8,7 @@ import os
 root = Tk()
 root.title("迷宮")
 
+
 # 初始化變數
 game_screen_icon = []
 scope = []
@@ -57,7 +58,7 @@ def get_difficulty():
     while True:
         try:
             mode = int(input('選擇你的難易度(1)(2)(3)(4): '))
-            if mode not in [1, 2, 3, 4]:
+            if mode not in [1, 2, 3, 4,401]:
                 print("請輸入1、2、3或4中的一個數字。")
             else:
                 return mode
@@ -104,7 +105,7 @@ def input_map_info():
 
 # 建立地圖
 def map_creation():
-    global Map, X, Y, number_of_mallets
+    global Map, X, Y, number_of_mallets,mode
     Xrand = rand(2, size - 2)
     Yrand = rand(2, size - 2)
     
@@ -125,6 +126,9 @@ def map_creation():
         Map[size - 3][size - 3] = '●'
     
     # 根據難度設置起點和終點
+    if mode == 401:
+        mode=4
+        number_of_mallets=10000
     if mode == 1:
         Map[Y][X] = 'O'
         Map[Y][X + 1] = '-'
@@ -238,6 +242,7 @@ def map_is_out_of_view():
 
 # 移動角色的函數，根據方向更新角色位置和地圖狀態
 def control_character(direction):
+    
     global X, Y, perspective_flag, transmit_flag, mallet_flag, number_of_mallets,size, mode, portal, mallet,vision
     # 如果角色往上移動且移動方向上不是障礙物或者有槌子道具可使用，並且不是邊界
     if direction == 'up' and (Map[Y - 1][X] != 'X' or (mallet_flag == 1 and number_of_mallets > 0)) and Map[Y - 1][X] != '_':
@@ -374,6 +379,12 @@ def move():
 
 
 
+#鍵盤輸入轉換
+def keyboard_input(letter):
+    if(letter.char=='w' or letter.char=='W'):control_character('up')
+    if(letter.char=='a' or letter.char=='A'):control_character('left')
+    if(letter.char=='s' or letter.char=='S'):control_character('down')
+    if(letter.char=='d' or letter.char=='D'):control_character('right')
 
 
 
@@ -402,13 +413,14 @@ def remake_parameters():
 
 def main():
     global size, mode, mallet, portal,vision
-
+    root.bind("<Key>", keyboard_input)
     # 打印遊戲說明和提示
     print("歡迎來到迷宮遊戲！")
     print("O是你的位置，X是障礙物過不去，㊣是終點，●是傳送門，╤是槌子，-是路，|跟_是邊界")
     print("在遊戲中，你可以使用 ↑、↓、←、→ 分別來控制上、下、左、右移動。")
-    print("第三視角可以看地圖\n")
-    print("槌子可以破障礙物\n")
+    print("第三視角可以看地圖")
+    print("槌子可以破障礙物")
+    print("可以用wasd控制腳色，只是你要輸入要調成英文\n")
     print("難易度說明：")
     print("難易度1時你在左上角，終點在右下角")
     print("難易度2時你在左上角，終點隨機")
@@ -428,5 +440,4 @@ def main():
     root.mainloop()
 
 main()
-
 
