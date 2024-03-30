@@ -1,5 +1,33 @@
-# maze
-This is a small game I came up with after taking several Python GUI classes.<br>
-The executable file and folder are the data that I converted the .py file into an executable file.  
-如果想要玩，下載zip檔解壓縮就好  
-[評論區](https://github.com/xixa3333/maze/discussions/1)在這
+# 迷宮遊戲
+
+可執行文件和文件夾是我將 .py 文件轉換為可執行文件的數據。  
+如果想要玩，下載zip檔後解壓縮就好。
+
+[評論區](https://github.com/xixa3333/maze/discussions/1)在這裡。
+
+## 遊戲說明
+
+此遊戲是一個基於 Tkinter 的迷宮遊戲，你需要在地圖中尋找終點並避開障礙物。以下是遊戲的一些特點和遊戲玩法：
+
+- 遊戲界面使用 Tkinter 構建，提供了基本的視窗和按鈕交互。
+- 地圖生成使用了隨機算法，你可以選擇不同的難度和地圖大小。
+- 在遊戲中，你可以使用方向鍵（↑、↓、←、→）來控制角色的移動，也可以使用wasd按鍵。
+- 遊戲支持第三視角模式，讓你更清晰地看到地圖。
+- 你可以使用槌子道具來破壞障礙物。
+- 如果你在遊戲中遇到困難，你可以重置遊戲，重新開始。
+
+## 遊戲操作
+
+- 使用方向鍵（↑、↓、←、→）或者wasd按鍵來控制角色的移動。
+- 按下 `Mallet` 按鈕可以開啟或關閉槌子道具。
+- 按下 `reset` 按鈕可以重置遊戲。
+- 按下 `第三視角` 按鈕可以開啟或關閉第三視角模式。
+
+## 注意事項
+
+- 在遊戲中要小心障礙物，它們可能會擋住你的路線。
+- 注意終點和傳送門是否被障礙物擋住。
+
+## 遊戲截圖
+
+![螢幕擷取畫面 2024-03-31 035111](https://github.com/xixa3333/maze/assets/128284090/e7f704d8-fd96-47ec-ad24-4c775fad3eec)
